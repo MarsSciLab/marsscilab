@@ -1,61 +1,47 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MarsSciLab | 火星科學實驗室</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <style>
-        body {
-            background-color: #0b0d17; /* 深太空色 */
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-        }
-        .container {
-            border: 1px solid #444;
-            padding: 3rem;
-            border-radius: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            box-shadow: 0 0 30px rgba(255, 69, 0, 0.2);
-        }
-        h1 { color: #ff4500; font-size: 2.5rem; margin-bottom: 0.5rem; }
-        .subtitle { font-size: 1.2rem; color: #aaa; margin-bottom: 2rem; }
-        .bio { max-width: 500px; line-height: 1.6; margin-bottom: 2rem; }
-        .contact {
-            background: #ff4500;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        .contact:hover { background: #ff6347; }
-        .footer { margin-top: 3rem; font-size: 0.8rem; color: #666; }
+        body { margin: 0; background: #0b0d17; color: white; font-family: sans-serif; overflow: hidden; }
+        .ui { position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.7); padding: 15px; border-radius: 8px; border: 1px solid #ff4d00; }
+        h2 { color: #ff4d00; margin-top: 0; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🚀 MarsSciLab.com</h1>
-        <p class="subtitle">火星物理學家：重新發現經典力學</p>
-        
-        <div class="bio">
-            <p>我是物理背景的科研工作者，也是兩個孩子的父親。<br>
-            我正在為下一代打造一個基於真實火星場景的 3D 物理實驗室。<br>
-            精彩內容即將在 2026 年底上線。</p>
-        </div>
-
-        <a href="mailto:dr@marsscilab.com" class="contact">聯絡我：dr@marsscilab.com</a>
+    <div class="ui">
+        <h2>MarsSciLab 實驗 01</h2>
+        <p>環境：火星表面 (G = 3.72 m/s²)</p>
+        <p id="timer">時間：0.00 s</p>
+        <p id="dist">位移：0.00 m</p>
+        <button onclick="resetSim()">重新投下</button>
     </div>
+    <script>
+        let y = 50, v = 0, a = 3.72, t = 0;
+        let running = true;
+        const scale = 20; // 1公尺 = 20像素
 
-    <div class="footer">
-        &copy; 2026 MarsSciLab. Built by a Physics PhD for the next generation.
-    </div>
+        function setup() { createCanvas(windowWidth, windowHeight); }
+
+        function draw() {
+            background(11, 13, 23);
+            if (y < height - 50) {
+                let dt = 1/60; // 假設 60 FPS
+                v += a * dt;
+                y += v * scale * dt;
+                t += dt;
+            }
+            // 繪製火星地表
+            fill(193, 68, 14); noStroke();
+            rect(0, height - 50, width, 50);
+            // 繪製實驗物體
+            fill(255, 77, 0); circle(width/2, y, 30);
+            // 更新 UI
+            document.getElementById('timer').innerText = "時間：" + t.toFixed(2) + " s";
+            document.getElementById('dist').innerText = "位移：" + (0.5 * a * t * t).toFixed(2) + " m";
+        }
+
+        function resetSim() { y = 50; v = 0; t = 0; }
+    </script>
 </body>
 </html>
